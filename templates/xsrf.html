@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>xsrf</title>
+    <script type="text/javascript" src="{{static_url('js/jquery-1.12.4.min.js')}}"></script>
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cook = document.cookie.match("\\b" + name + "=([^;]*)\\b")
+            return cook ? cook[1] : undefined
+        }
+
+        function login() {
+            var str = {
+                "name": "132",
+                "age": 6
+            };
+            var jsonstr = JSON.stringify(str);
+            $.ajax({
+                url: "/XSRFTestHandler",
+                method: "POST",
+                data: jsonstr,
+                success: function (data) {
+                    alert("ok")
+                },
+                headers: {
+                    "X-XSRFToken": getCookie("_xsrf")
+                },
+                error: function () {
+                    alert("error")
+                }
+            })
+
+        }
+    </script>
+</head>
+<body>
+<!--<form action="/XSRFTestHandler" method="post" >-->
+<input type="text" value="username"/>
+<br>
+<button onclick="login()">提交</button>
+<!--</form>-->
+
+<form action="/XSRFTestHandler" method="post">
+    <input type="text" value="username"/>
+    <input type="submit" value="form">
+
+</form>
+
+</body>
+</html>
